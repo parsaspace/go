@@ -80,7 +80,7 @@ func (p Parsaspace) Remove(domain, path string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+RemoveRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "path": path},
@@ -106,7 +106,7 @@ func (p Parsaspace) Rename(domain, source, destination string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+RenameRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "source": source, "destination": destination},
@@ -132,7 +132,7 @@ func (p Parsaspace) Move(domain, source, destination string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+MoveRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "source": source, "destination": destination},
@@ -158,7 +158,7 @@ func (p Parsaspace) Copy(domain, source, destination string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+CopyRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "source": source, "destination": destination},
@@ -184,7 +184,7 @@ func (p Parsaspace) NewDir(domain, path string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+CreateDirRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "path": path},
@@ -240,7 +240,7 @@ func (p Parsaspace) RemoteUpload(domain, path, url, filename, checkid string) er
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+RemoteUploadRoute,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"domain": domain, "path": path, "url": url, "filename": filename, "checkid": checkid},
@@ -266,7 +266,7 @@ func (p Parsaspace) RemoteUploadStatus(checkid string) error {
 	var dt Response
 
 	// This will upload the file as a multipart mime request
-	resp, err := grequests.Post(p.APIBase+FilesRoute,
+	resp, err := grequests.Post(p.APIBase+RemoteUploadStatus,
 		&grequests.RequestOptions{
 			Headers: map[string]string{"Authorization": p.APIKey},
 			Data:    map[string]string{"checkid": checkid},
