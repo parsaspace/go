@@ -33,12 +33,20 @@ type Response struct {
 	List    []List `json:"list"`
 	Message string
 }
+type RemoteUploadResult struct {
+	Result string             `json:"result"`
+	List   []RemoteUploadList `json:"list"`
+}
+type RemoteUploadList struct {
+	Status       string
+	DownloadSize int64
+}
 
 // List : response list item
 type List struct {
 	Name         string    `json:"Name"`
 	IsFolder     string    `json:"IsFolder"`
-	Size         int       `json:"Size"`
+	Size         int64     `json:"Size"`
 	LastModified time.Time `json:"LastModified"`
 }
 
@@ -66,7 +74,8 @@ func (p Parsaspace) Files(domain, path string) ([]List, error) {
 	}
 
 	if resp.Ok != true {
-		log.Println("Request did not return OK")
+		log.Println("Request did not return OK!!!!!")
+		log.Println(resp)
 		return ls.List, errors.New(("Request did not return OK"))
 	}
 
@@ -146,7 +155,7 @@ func (p Parsaspace) Move(domain, source, destination string) error {
 	resp.JSON(&dt)
 
 	if dt.Result != "success" {
-		log.Println("Request did not return OK")
+		log.Println("Request did not return OK", dt.Result)
 		return errors.New(("Request did not return OK"))
 	}
 
@@ -254,7 +263,7 @@ func (p Parsaspace) RemoteUpload(domain, path, url, filename, checkid string) er
 	resp.JSON(&dt)
 
 	if dt.Result != "success" {
-		log.Println("Request did not return OK")
+		log.Println(resp)
 		return errors.New(("Request did not return OK"))
 	}
 
@@ -262,8 +271,8 @@ func (p Parsaspace) RemoteUpload(domain, path, url, filename, checkid string) er
 }
 
 // RemoteUploadStatus : remoteupload status
-func (p Parsaspace) RemoteUploadStatus(checkid string) error {
-	var dt Response
+func (p Parsaspace) RemoteUploadStatus(checkid string) (RemoteUploadResult, error) {
+	var dt RemoteUploadResult
 
 	// This will upload the file as a multipart mime request
 	resp, err := grequests.Post(p.APIBase+RemoteUploadStatus,
@@ -274,15 +283,15 @@ func (p Parsaspace) RemoteUploadStatus(checkid string) error {
 
 	if err != nil {
 		log.Println("Unable to make request", resp.Error)
-		return resp.Error
+		return dt, err
 	}
 
 	resp.JSON(&dt)
 
 	if dt.Result != "success" {
 		log.Println("Request did not return OK")
-		return errors.New(("Request did not return OK"))
+		return dt, errors.New(("Request did not return OK"))
 	}
 
-	return nil
+	return dt, nil
 }
